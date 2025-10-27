@@ -182,65 +182,64 @@
 							}
 
 
-							let mouseDown = false;
+							// Spawn state
+							let isSpawning = false;
 							let mouseX = 0;
 							let mouseY = 0;
-							let activePointerId = null;
-							let isOverLogo = false;
 
-							logo.addEventListener('pointerdown', (e) => {
-								// Only respond to left mouse button or touch
-								if (e.pointerType === 'mouse' && e.button !== 0) return;
-								mouseDown = true;
-								isOverLogo = true;
+							// Prevent default drag behavior of the logo
+							logo.draggable = false;
+							logo.addEventListener('dragstart', e => e.preventDefault());
+
+							// Check if point is within logo boundaries
+							function isWithinLogo(x, y) {
+								const rect = logo.getBoundingClientRect();
+								return (
+									x >= rect.left && 
+									x <= rect.right && 
+									y >= rect.top && 
+									y <= rect.bottom
+								);
+							}
+
+							// Start spawning emojis
+							logo.addEventListener('mousedown', e => {
+								if (e.button !== 0) return; // left click only
+								isSpawning = true;
 								mouseX = e.clientX;
 								mouseY = e.clientY;
-								activePointerId = e.pointerId;
-								logo.setPointerCapture(e.pointerId);
+
 								spawnInterval = setInterval(() => {
-									if (mouseDown && isOverLogo) {
+									if (isSpawning) {
 										spawnEmojiAt(mouseX, mouseY);
 									}
 								}, 60);
 							});
 
-							document.addEventListener('pointermove', (e) => {
-								if (mouseDown && e.pointerId === activePointerId) {
-									mouseX = e.clientX;
-									mouseY = e.clientY;
-									
-									// Check if the pointer is within the logo boundaries
-									const logoRect = logo.getBoundingClientRect();
-									isOverLogo = (
-										mouseX >= logoRect.left &&
-										mouseX <= logoRect.right &&
-										mouseY >= logoRect.top &&
-										mouseY <= logoRect.bottom
-									);
+							// Track mouse movement and check boundaries
+							document.addEventListener('mousemove', e => {
+								if (!isSpawning) return;
+								
+								mouseX = e.clientX;
+								mouseY = e.clientY;
+
+								if (!isWithinLogo(mouseX, mouseY)) {
+									stopSpawning();
 								}
 							});
 
-							function stopSpawning(e) {
-								if (!mouseDown || (e && e.pointerId !== activePointerId)) return;
-								if (e && e.pointerId) {
-									logo.releasePointerCapture(e.pointerId);
-								}
-								mouseDown = false;
-								isOverLogo = false;
-								activePointerId = null;
+							// Stop spawning
+							function stopSpawning() {
+								isSpawning = false;
 								if (spawnInterval) {
 									clearInterval(spawnInterval);
 									spawnInterval = null;
 								}
 							}
-							// Stop spawning on pointerup anywhere in the window or on the logo itself
-							window.addEventListener('pointerup', stopSpawning);
-							logo.addEventListener('pointerup', stopSpawning);
-							logo.addEventListener('mouseleave', stopSpawning);
-							// Stop spawning on pointerup anywhere or when pointer leaves the window
-							window.addEventListener('pointerup', stopSpawning);
-							window.addEventListener('pointercancel', stopSpawning);
-							window.addEventListener('pointerleave', stopSpawning);
+
+							// Stop spawning on mouse up
+							window.addEventListener('mouseup', stopSpawning);
+
 						});
 						</script>
 
