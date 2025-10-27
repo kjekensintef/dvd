@@ -95,6 +95,9 @@
 			.social-link[href*="instagram.com"]:hover .ig-gradient-wrap::after {
 				opacity: 1;
 			}
+			img:focus, img:active {
+  outline: none;
+}
 		</style>
 	</head>
 	<body>
@@ -115,38 +118,31 @@
 			</div>
 		</div>
 
+
 						<script is:inline>
-						// Add splash emoji animation at pointer location on logo click
+						// Rapid splash emoji spawn on logo mousedown/hold
 						document.addEventListener('DOMContentLoaded', () => {
 							const logo = document.getElementById('band-logo');
-							logo.addEventListener('click', (e) => {
-								// All logic is already per-click and per-emoji, so spam clicking is supported.
-								// The only thing to ensure is that style elements are unique and not reused.
-								// This is already handled by the unique animName per click.
-								// No further changes needed for spam clicking, but this comment clarifies intent.
+							let spawnInterval = null;
+
+							function spawnEmojiAt(x, y) {
 								const emoji = document.createElement('div');
 								emoji.className = 'splash-emoji';
 								emoji.textContent = '💦';
-								emoji.style.fontSize = '3rem'; // force large size inline
+								emoji.style.fontSize = '3rem';
 								document.body.appendChild(emoji);
 								emoji.style.position = 'fixed';
-								emoji.style.left = `${e.clientX}px`;
-								emoji.style.top = `${e.clientY}px`;
+								emoji.style.left = `${x}px`;
+								emoji.style.top = `${y}px`;
 								emoji.style.pointerEvents = 'none';
-								const startY = e.clientY;
-								const viewportHeight = window.innerHeight;
 								const vx = (Math.random() * 2 - 1);
 								const vy = -(Math.random() * 0.7 + 0.3);
 								const duration = 2.2;
 								const velocityScale = 600;
 								const gravity = 1200;
-								const xDistance = vx * velocityScale * duration;
-								const yDistance = vy * velocityScale * duration + 0.5 * gravity * duration * duration;
 								const animName = `splash-bounce-${Date.now()}-${Math.floor(Math.random()*10000)}`;
-								// Add a random, faster rotation for each emoji
-								const startRot = Math.floor(Math.random() * 360) - 180; // -180 to 180 deg
-								// End rotation: add between -1080 and 1080 degrees for faster spin
-								const endRot = startRot + (Math.random() * 2160 - 1080); // -1080 to 1080 deg
+								const startRot = Math.floor(Math.random() * 360) - 180;
+								const endRot = startRot + (Math.random() * 2160 - 1080);
 								const styleSheet = document.createElement('style');
 								function projectileAt(t) {
 									const x = vx * velocityScale * t;
@@ -161,7 +157,6 @@
 									const { x, y } = projectileAt(t);
 									let opacity = 1;
 									let scale = 1;
-									// Interpolate rotation from startRot to endRot
 									let rotate = startRot + (endRot - startRot) * (i / steps);
 									if (percent === 0) {
 										opacity = 0;
@@ -178,14 +173,74 @@
 								}
 								styleSheet.innerHTML = `@keyframes ${animName} {\n${kf.join('\n')}\n}`;
 								document.head.appendChild(styleSheet);
-								// Force reflow to ensure animation always starts, even on rapid clicks
 								void emoji.offsetWidth;
 								emoji.style.animation = `${animName} ${duration}s cubic-bezier(0.3, 0.7, 0.6, 1.2) forwards`;
 								setTimeout(() => {
 									emoji.remove();
 									styleSheet.remove();
 								}, (duration + 0.2) * 1000);
+							}
+
+
+							let mouseDown = false;
+							let mouseX = 0;
+							let mouseY = 0;
+							let activePointerId = null;
+							let isOverLogo = false;
+
+							logo.addEventListener('pointerdown', (e) => {
+								// Only respond to left mouse button or touch
+								if (e.pointerType === 'mouse' && e.button !== 0) return;
+								mouseDown = true;
+								isOverLogo = true;
+								mouseX = e.clientX;
+								mouseY = e.clientY;
+								activePointerId = e.pointerId;
+								logo.setPointerCapture(e.pointerId);
+								spawnInterval = setInterval(() => {
+									if (mouseDown && isOverLogo) {
+										spawnEmojiAt(mouseX, mouseY);
+									}
+								}, 60);
 							});
+
+							document.addEventListener('pointermove', (e) => {
+								if (mouseDown && e.pointerId === activePointerId) {
+									mouseX = e.clientX;
+									mouseY = e.clientY;
+									
+									// Check if the pointer is within the logo boundaries
+									const logoRect = logo.getBoundingClientRect();
+									isOverLogo = (
+										mouseX >= logoRect.left &&
+										mouseX <= logoRect.right &&
+										mouseY >= logoRect.top &&
+										mouseY <= logoRect.bottom
+									);
+								}
+							});
+
+							function stopSpawning(e) {
+								if (!mouseDown || (e && e.pointerId !== activePointerId)) return;
+								if (e && e.pointerId) {
+									logo.releasePointerCapture(e.pointerId);
+								}
+								mouseDown = false;
+								isOverLogo = false;
+								activePointerId = null;
+								if (spawnInterval) {
+									clearInterval(spawnInterval);
+									spawnInterval = null;
+								}
+							}
+							// Stop spawning on pointerup anywhere in the window or on the logo itself
+							window.addEventListener('pointerup', stopSpawning);
+							logo.addEventListener('pointerup', stopSpawning);
+							logo.addEventListener('mouseleave', stopSpawning);
+							// Stop spawning on pointerup anywhere or when pointer leaves the window
+							window.addEventListener('pointerup', stopSpawning);
+							window.addEventListener('pointercancel', stopSpawning);
+							window.addEventListener('pointerleave', stopSpawning);
 						});
 						</script>
 
