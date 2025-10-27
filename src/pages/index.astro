@@ -205,31 +205,47 @@
 								);
 							}
 
-							// Start spawning emojis
-							logo.addEventListener('mousedown', e => {
-								if (e.button !== 0) return; // left click only
+							// Helper function to get coordinates from either mouse or touch event
+							function getEventCoordinates(e) {
+								if (e.touches) {
+									return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+								}
+								return { x: e.clientX, y: e.clientY };
+							}
+
+							// Start spawning emojis (mouse & touch)
+							function startSpawning(e) {
+								if (e.type === 'mousedown' && e.button !== 0) return; // left click only for mouse
 								isSpawning = true;
-								mouseX = e.clientX;
-								mouseY = e.clientY;
+								const coords = getEventCoordinates(e);
+								mouseX = coords.x;
+								mouseY = coords.y;
 
 								spawnInterval = setInterval(() => {
 									if (isSpawning) {
 										spawnEmojiAt(mouseX, mouseY);
 									}
 								}, 60);
-							});
 
-							// Track mouse movement and check boundaries
-							document.addEventListener('mousemove', e => {
+								// Prevent default behavior
+								e.preventDefault();
+							}
+
+							// Track movement and check boundaries (mouse & touch)
+							function trackMovement(e) {
 								if (!isSpawning) return;
 								
-								mouseX = e.clientX;
-								mouseY = e.clientY;
+								const coords = getEventCoordinates(e);
+								mouseX = coords.x;
+								mouseY = coords.y;
 
 								if (!isWithinLogo(mouseX, mouseY)) {
 									stopSpawning();
 								}
-							});
+
+								// Prevent default behavior
+								e.preventDefault();
+							}
 
 							// Stop spawning
 							function stopSpawning() {
@@ -240,8 +256,16 @@
 								}
 							}
 
-							// Stop spawning on mouse up
+							// Add mouse event listeners
+							logo.addEventListener('mousedown', startSpawning);
+							document.addEventListener('mousemove', trackMovement);
 							window.addEventListener('mouseup', stopSpawning);
+
+							// Add touch event listeners
+							logo.addEventListener('touchstart', startSpawning, { passive: false });
+							document.addEventListener('touchmove', trackMovement, { passive: false });
+							window.addEventListener('touchend', stopSpawning);
+							window.addEventListener('touchcancel', stopSpawning);
 
 						});
 						</script>
