@@ -1,0 +1,186 @@
+---
+import '../../styles/global.css';
+---
+<script is:inline>
+// Rapid splash emoji spawn on logo mousedown/hold
+document.addEventListener('DOMContentLoaded', () => {
+    const logo = document.getElementById('band-logo');
+    const scrollIndicator = document.querySelector('.scroll-indicator');
+    
+    // Hide scroll indicator when user starts scrolling
+    let scrollTimeout;
+    window.addEventListener('scroll', () => {
+        if (scrollIndicator) {
+            scrollIndicator.style.opacity = '0';
+            scrollIndicator.style.transition = 'opacity 0.3s ease-out';
+            
+            // Clear any existing timeout
+            if (scrollTimeout) {
+                clearTimeout(scrollTimeout);
+            }
+            
+            // Remove the element after animation
+            scrollTimeout = setTimeout(() => {
+                scrollIndicator.remove();
+            }, 300);
+        }
+    }, { passive: true });
+    let spawnInterval = null;
+
+    function spawnEmojiAt(x, y) {
+        const emoji = document.createElement('div');
+        emoji.className = 'splash-emoji';
+        emoji.textContent = '💦';
+        emoji.style.fontSize = '3rem';
+        document.body.appendChild(emoji);
+        emoji.style.position = 'fixed';
+        emoji.style.left = `${x}px`;
+        emoji.style.top = `${y}px`;
+        emoji.style.pointerEvents = 'none';
+        const vx = (Math.random() * 2 - 1);
+        const vy = -(Math.random() * 0.7 + 0.3);
+        const duration = 2.2;
+        const velocityScale = 600;
+        const gravity = 1200;
+        const animName = `splash-bounce-${Date.now()}-${Math.floor(Math.random()*10000)}`;
+        const startRot = Math.floor(Math.random() * 360) - 180;
+        const endRot = startRot + (Math.random() * 2160 - 1080);
+        const styleSheet = document.createElement('style');
+        function projectileAt(t) {
+            const x = vx * velocityScale * t;
+            const y = vy * velocityScale * t + 0.5 * gravity * t * t;
+            return { x, y };
+        }
+        const kf = [];
+        const steps = 100;
+        for (let i = 0; i <= steps; i++) {
+            const t = duration * (i / steps);
+            const percent = Math.round((i / steps) * 100);
+            const { x, y } = projectileAt(t);
+            let opacity = 1;
+            let scale = 1;
+            let rotate = startRot + (endRot - startRot) * (i / steps);
+            if (percent === 0) {
+                opacity = 0;
+                scale = 1;
+                rotate = startRot;
+            } else if (percent === Math.round(10 * 100 / steps)) {
+                scale = 1;
+            } else if (percent === 100) {
+                opacity = 0;
+                scale = 1;
+                rotate = endRot;
+            }
+            kf.push(`${percent}% { opacity: ${opacity}; transform: translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(${scale}) rotate(${rotate}deg); }`);
+        }
+        styleSheet.innerHTML = `@keyframes ${animName} {\n${kf.join('\n')}\n}`;
+        document.head.appendChild(styleSheet);
+        void emoji.offsetWidth;
+        emoji.style.animation = `${animName} ${duration}s cubic-bezier(0.3, 0.7, 0.6, 1.2) forwards`;
+        setTimeout(() => {
+            emoji.remove();
+            styleSheet.remove();
+        }, (duration + 0.2) * 1000);
+    }
+
+    // Spawn state
+    let isSpawning = false;
+    let mouseX = 0;
+    let mouseY = 0;
+
+    // Prevent default drag behavior of the logo
+    logo.draggable = false;
+    logo.addEventListener('dragstart', e => e.preventDefault());
+
+    // Check if point is within logo boundaries
+    function isWithinLogo(x, y) {
+        const rect = logo.getBoundingClientRect();
+        return (
+            x >= rect.left && 
+            x <= rect.right && 
+            y >= rect.top && 
+            y <= rect.bottom
+        );
+    }
+
+    // Helper function to get coordinates from either mouse or touch event
+    function getEventCoordinates(e) {
+        if (e.touches) {
+            return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        }
+        return { x: e.clientX, y: e.clientY };
+    }
+
+    // Start spawning emojis (mouse & touch)
+    function startSpawning(e) {
+        if (e.type === 'mousedown' && e.button !== 0) return; // left click only for mouse
+        isSpawning = true;
+        const coords = getEventCoordinates(e);
+        mouseX = coords.x;
+        mouseY = coords.y;
+
+        spawnInterval = setInterval(() => {
+            if (isSpawning) {
+                spawnEmojiAt(mouseX, mouseY);
+            }
+        }, 60);
+
+        // Prevent default behavior
+        e.preventDefault();
+    }
+
+    // Track movement and check boundaries (mouse & touch)
+    function trackMovement(e) {
+        if (!isSpawning) return;
+        
+        const coords = getEventCoordinates(e);
+        mouseX = coords.x;
+        mouseY = coords.y;
+
+        if (!isWithinLogo(mouseX, mouseY)) {
+            stopSpawning();
+        }
+
+        // Prevent default behavior
+        e.preventDefault();
+    }
+
+    // Stop spawning
+    function stopSpawning() {
+        isSpawning = false;
+        if (spawnInterval) {
+            clearInterval(spawnInterval);
+            spawnInterval = null;
+        }
+    }
+
+    // Add mouse event listeners
+    logo.addEventListener('mousedown', startSpawning);
+    document.addEventListener('mousemove', trackMovement);
+    window.addEventListener('mouseup', stopSpawning);
+
+    // Add touch event listeners
+    logo.addEventListener('touchstart', startSpawning, { passive: false });
+    document.addEventListener('touchmove', trackMovement, { passive: false });
+    window.addEventListener('touchend', stopSpawning);
+    window.addEventListener('touchcancel', stopSpawning);
+});
+</script>
+
+<div class="centered-header">
+    <img src="/dvd/dvd_logo.png" alt="DVD Band Logo" class="logo" id="band-logo" style="cursor:pointer;" />
+    <div class="scroll-indicator">▼</div>
+    <div class="social-row">
+        <a class="social-link" href="https://www.facebook.com/dinvaatedrom" target="_blank" rel="noopener" aria-label="Facebook">
+            <img src="/dvd/Facebook_Logo_Secondary.png" alt="Facebook" width="32" height="32" style="display:block;" />
+        </a>
+        <a class="social-link social-link-youtube" href="https://www.youtube.com/@dinvatedrom" target="_blank" rel="noopener" aria-label="YouTube">
+            <img src="/dvd/yt_logo_white_digital.png" alt="YouTube" class="yt-logo" />
+        </a>
+        <a class="social-link" href="https://www.instagram.com/dinvatedrom/" target="_blank" rel="noopener" aria-label="Instagram">
+            <span class="ig-gradient-wrap">
+                <img src="/dvd/Instagram_Glyph_White.png" alt="Instagram" width="32" height="32" style="display:block; position:relative; z-index:1;" />
+            </span>
+        </a>
+    </div>
+</div>
