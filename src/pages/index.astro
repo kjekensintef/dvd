@@ -81,6 +81,30 @@
 								content: url('/dvd/yt_logo_fullcolor_white_digital.png');
 								filter: none !important;
 							}
+							@keyframes floatArrow {
+								0% { transform: translateY(0) translateX(-50%); opacity: 0.6; }
+								50% { transform: translateY(10px) translateX(-50%); opacity: 0.8; }
+								100% { transform: translateY(0) translateX(-50%); opacity: 0.6; }
+							}
+							.scroll-indicator {
+								position: fixed;
+								bottom: 20px;
+								left: 50%;
+								transform: translateX(-50%);
+								color: white;
+								font-size: 1.5rem;
+								line-height: 1;
+								animation: floatArrow 2s ease-in-out infinite;
+								opacity: 0.6;
+								pointer-events: none;
+								z-index: 1000;
+								filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
+							}
+							@media (min-width: 1024px) {
+								.scroll-indicator {
+									display: none;
+								}
+							}
 			.ig-gradient-wrap {
 				display: inline-block;
 				position: relative;
@@ -110,6 +134,7 @@
 	<body>
 		<div class="centered-header">
 			<img src="/dvd/dvd_logo.png" alt="DVD Band Logo" class="logo" id="band-logo" style="cursor:pointer;" />
+			<div class="scroll-indicator">▼</div>
 			<div class="social-row">
 				<a class="social-link" href="https://www.facebook.com/dinvaatedrom" target="_blank" rel="noopener" aria-label="Facebook">
 					<img src="/dvd/Facebook_Logo_Secondary.png" alt="Facebook" width="32" height="32" style="display:block;" />
@@ -130,6 +155,26 @@
 						// Rapid splash emoji spawn on logo mousedown/hold
 						document.addEventListener('DOMContentLoaded', () => {
 							const logo = document.getElementById('band-logo');
+							const scrollIndicator = document.querySelector('.scroll-indicator');
+							
+							// Hide scroll indicator when user starts scrolling
+							let scrollTimeout;
+							window.addEventListener('scroll', () => {
+								if (scrollIndicator) {
+									scrollIndicator.style.opacity = '0';
+									scrollIndicator.style.transition = 'opacity 0.3s ease-out';
+									
+									// Clear any existing timeout
+									if (scrollTimeout) {
+										clearTimeout(scrollTimeout);
+									}
+									
+									// Remove the element after animation
+									scrollTimeout = setTimeout(() => {
+										scrollIndicator.remove();
+									}, 300);
+								}
+							}, { passive: true });
 							let spawnInterval = null;
 
 							function spawnEmojiAt(x, y) {
