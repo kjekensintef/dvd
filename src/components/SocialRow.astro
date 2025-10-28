@@ -1,20 +1,28 @@
 <style>
+    /* CSS Custom Properties for consistent values */
+    :root {
+        --social-icon-size: 32px;
+        --social-link-size: 56px;
+        --hover-transition: 0.2s;
+        --spacing-gap: 2rem;
+    }
+
+    /* Base Styles */
     .social-row {
         display: flex;
-        gap: 2rem;
+        gap: var(--spacing-gap);
         margin-top: 1rem;
     }
 
     .social-link {
         color: #f3f4f6;
         text-decoration: none;
-        font-size: 2rem;
-        transition: color 0.2s;
-        width: 56px;
-        height: 56px;
+        width: var(--social-link-size);
+        height: var(--social-link-size);
         display: flex;
         align-items: center;
         justify-content: center;
+        transition: transform var(--hover-transition);
     }
 
     .social-link img {
@@ -22,6 +30,7 @@
         margin: 0 auto;
     }
 
+    /* Social Media Specific Styles */
     /* YouTube */
     .social-link-youtube {
         padding-inline: 4px;
@@ -30,6 +39,7 @@
     .yt-logo {
         width: 119px;
         height: 40px;
+        transition: content var(--hover-transition);
     }
 
     .social-link-youtube:hover .yt-logo {
@@ -37,33 +47,42 @@
     }
 
     /* Facebook */
+    .social-link[href*="facebook.com"] img {
+        width: var(--social-icon-size);
+        height: var(--social-icon-size);
+        transition: filter var(--hover-transition);
+    }
+
     .social-link[href*="facebook.com"]:hover img {
         filter: brightness(0) saturate(100%) invert(34%) sepia(99%) saturate(749%) hue-rotate(183deg) brightness(98%) contrast(92%);
     }
 
     /* Instagram */
-    .social-link:not([href*="facebook.com"]):not(.social-link-youtube):hover img {
-        filter: brightness(0) saturate(100%) invert(62%) sepia(92%) saturate(749%) hue-rotate(165deg) brightness(98%) contrast(92%);
-    }
-
     .ig-gradient-wrap {
         display: inline-block;
         position: relative;
-        width: 32px;
-        height: 32px;
+        width: var(--social-icon-size);
+        height: var(--social-icon-size);
     }
 
     .ig-gradient-wrap::after {
         content: '';
         position: absolute;
-        left: 0; top: 0; width: 100%; height: 100%;
+        inset: 0;
         pointer-events: none;
         opacity: 0;
         z-index: 2;
         border-radius: 8px;
-        background: radial-gradient(circle at 30% 110%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+        background: radial-gradient(
+            circle at 30% 110%,
+            #fdf497 0%,
+            #fdf497 5%,
+            #fd5949 45%,
+            #d6249f 60%,
+            #285AEB 90%
+        );
         mix-blend-mode: screen;
-        transition: opacity 0.2s;
+        transition: opacity var(--hover-transition);
     }
 
     .social-link[href*="instagram.com"]:hover .ig-gradient-wrap::after {
