@@ -21,11 +21,11 @@
 
     .scroll-indicator {
         position: fixed;
-        bottom: 32px;
+        bottom: min(14px, 4vw);
         left: 50%;
         transform: translateX(-50%);
         color: white;
-        font-size: 2.5rem;
+        font-size: clamp(1.5rem, 2vw, 2.5rem);
         line-height: 1;
         animation: floatArrow 1.5s ease-in-out infinite;
         opacity: 0.9;
@@ -39,24 +39,24 @@
         content: 'SCROLL';
         position: absolute;
         left: 50%;
-        bottom: 100%;
+        bottom: 90%;
         transform: translateX(-50%);
-        font-size: 0.8rem;
+        font-size: clamp(0.6rem, 1vw, 0.8rem);
         letter-spacing: 0.1em;
-        margin-bottom: 4px;
+        margin-bottom: clamp(2px, 0.5vw, 4px);
         font-weight: 500;
         opacity: 0.9;
     }
 
-    .scroll-indicator::after {
+    /* .scroll-indicator::after {
         content: '▼';
         position: absolute;
         left: 50%;
-        top: -8px;
+        bottom: 40%;
         transform: translateX(-50%);
         opacity: 0.4;
-        font-size: 1.8rem;
-    }
+        font-size: clamp(1.2rem, 1.5vw, 1.8rem);
+    } */
 
     .scroll-indicator.fade-out {
         animation: fadeOut 0.8s ease-out forwards;
