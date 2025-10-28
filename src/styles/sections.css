@@ -1,0 +1,31 @@
+.section-card {
+    max-width: 600px;
+    margin: 2rem auto;
+    background: #23232b;
+    padding: 2rem 2.5rem;
+    border-radius: 1.2rem;
+    box-shadow: 0 2px 16px #0004;
+    text-align: left;
+}
+
+.section-title {
+    margin-top: 0;
+    color: #f5610b;
+    font-size: 2rem;
+}
+
+.section-text {
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: #f3f4f6;
+}
+
+.section-link {
+    color: #38bdf8;
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+
+.section-link:hover {
+    opacity: 0.8;
+}
