@@ -11,10 +11,3 @@ body {
 img:focus, img:active {
     outline: none;
 }
-
-/* Animations */
-@keyframes floatArrow {
-    0% { transform: translateY(0) translateX(-50%); opacity: 0.6; }
-    50% { transform: translateY(10px) translateX(-50%); opacity: 0.8; }
-    100% { transform: translateY(0) translateX(-50%); opacity: 0.6; }
-}
