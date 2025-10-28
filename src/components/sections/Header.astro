@@ -1,5 +1,6 @@
 ---
 import '../../styles/global.css';
+import DvdScreensaver from '../DvdScreensaver.astro';
 ---
 
 <style>
@@ -16,6 +17,7 @@ import '../../styles/global.css';
         width: 80vw;
         margin-bottom: 2rem;
         display: block;
+        cursor: pointer;
         -webkit-tap-highlight-color: transparent;
         -webkit-touch-callout: none;
         user-select: none;
@@ -39,14 +41,15 @@ import '../../styles/global.css';
         justify-content: center;
     }
 
+    /* Social Links */
     .social-link img {
         display: block;
         margin: 0 auto;
     }
 
+    /* YouTube */
     .social-link-youtube {
-        padding-left: 4px;
-        padding-right: 4px;
+        padding-inline: 4px;
     }
 
     .yt-logo {
@@ -54,16 +57,18 @@ import '../../styles/global.css';
         height: 40px;
     }
 
+    .social-link-youtube:hover .yt-logo {
+        content: url('/yt_logo_fullcolor_white_digital.png');
+    }
+
+    /* Facebook */
     .social-link[href*="facebook.com"]:hover img {
         filter: brightness(0) saturate(100%) invert(34%) sepia(99%) saturate(749%) hue-rotate(183deg) brightness(98%) contrast(92%);
     }
 
+    /* Instagram */
     .social-link:not([href*="facebook.com"]):not(.social-link-youtube):hover img {
         filter: brightness(0) saturate(100%) invert(62%) sepia(92%) saturate(749%) hue-rotate(165deg) brightness(98%) contrast(92%);
-    }
-
-    .social-link-youtube:hover .yt-logo {
-        content: url('/yt_logo_fullcolor_white_digital.png');
     }
 
     @keyframes fadeOut {
@@ -162,11 +167,11 @@ import '../../styles/global.css';
 <script is:inline>
 // Rapid splash emoji spawn on logo mousedown/hold
 document.addEventListener('DOMContentLoaded', () => {
+
     const logo = document.getElementById('band-logo');
     const scrollIndicator = document.querySelector('.scroll-indicator');
     
     // Hide scroll indicator when user starts scrolling
-    let scrollTimeout;
     window.addEventListener('scroll', () => {
         if (scrollIndicator && !scrollIndicator.classList.contains('fade-out')) {
             // Add the fade-out class to trigger the animation
@@ -322,19 +327,20 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
+<DvdScreensaver logoPath="/DVD_logo.svg" opacity={0.25} />
 <div class="centered-header">
-    <img src="/dvd_logo.png" alt="DVD Band Logo" class="logo" id="band-logo" style="cursor:pointer;" />
+    <img src="/dvd_logo.png" alt="DVD Band Logo" class="logo" id="band-logo" />
     <div class="scroll-indicator">▼</div>
     <div class="social-row">
         <a class="social-link" href="https://www.facebook.com/dinvaatedrom" target="_blank" rel="noopener" aria-label="Facebook">
-            <img src="/Facebook_Logo_Secondary.png" alt="Facebook" width="32" height="32" style="display:block;" />
+            <img src="/Facebook_Logo_Secondary.png" alt="Facebook" width="32" height="32" />
         </a>
         <a class="social-link social-link-youtube" href="https://www.youtube.com/@dinvatedrom" target="_blank" rel="noopener" aria-label="YouTube">
             <img src="/yt_logo_white_digital.png" alt="YouTube" class="yt-logo" />
         </a>
         <a class="social-link" href="https://www.instagram.com/dinvatedrom/" target="_blank" rel="noopener" aria-label="Instagram">
             <span class="ig-gradient-wrap">
-                <img src="/Instagram_Glyph_White.png" alt="Instagram" width="32" height="32" style="display:block; position:relative; z-index:1;" />
+                <img src="/Instagram_Glyph_White.png" alt="Instagram" width="32" height="32" />
             </span>
         </a>
     </div>

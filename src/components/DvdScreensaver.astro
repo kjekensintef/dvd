@@ -1,0 +1,101 @@
+---
+interface Props {
+    logoPath: string;
+    opacity?: number;
+}
+
+const { logoPath = '', opacity = 0.1 } = Astro.props;
+---
+
+<style>
+    .dvd-screensaver {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        z-index: -1;
+        pointer-events: none;
+        opacity: var(--screensaver-opacity);
+    }
+</style>
+
+<script>
+function initDvdScreensaver(screensaver: HTMLElement) {
+    const logoPath = screensaver.dataset.logoPath;
+    if (!logoPath) {
+        console.error('Logo path is missing');
+        return;
+    }
+    
+    const dvdLogo = document.createElement('img');
+    dvdLogo.src = logoPath;
+    dvdLogo.alt = "DVD Logo";
+    
+    // Set all required styles
+    Object.assign(dvdLogo.style, {
+        position: 'absolute',
+        width: '100px',
+        height: '44px',
+        pointerEvents: 'none',
+        display: 'block',
+        objectFit: 'contain',
+        left: '0',
+        top: '0',
+        transformOrigin: 'center',
+        filter: 'brightness(0) invert(1)'
+    });
+    
+    screensaver.appendChild(dvdLogo);
+    
+    // Fixed dimensions for DVD logo
+    const logoWidth = 100;
+    const logoHeight = 44;
+    
+    // Initial position and velocity
+    let x = Math.random() * (window.innerWidth - logoWidth);
+    let y = Math.random() * (window.innerHeight - logoHeight);
+    let dx = 2;
+    let dy = 2;
+
+    // Set initial position immediately
+    dvdLogo.style.transform = `translate(${x}px, ${y}px)`;
+
+    function updateLogoPosition() {
+        // Update position
+        x += dx;
+        y += dy;
+
+        // Check for collisions with window edges
+        if (x <= 0 || x >= window.innerWidth - logoWidth) {
+            dx = -dx;
+            dvdLogo.style.filter = `brightness(0) saturate(100%) invert(1) sepia(100%) saturate(10000%) hue-rotate(${Math.random() * 360}deg)`;
+        }
+        if (y <= 0 || y >= window.innerHeight - logoHeight) {
+            dy = -dy;
+            dvdLogo.style.filter = `brightness(0) saturate(100%) invert(1) sepia(100%) saturate(10000%) hue-rotate(${Math.random() * 360}deg)`;
+        }
+
+        // Apply new position
+        dvdLogo.style.transform = `translate(${x}px, ${y}px)`;
+        requestAnimationFrame(updateLogoPosition);
+    }
+
+    // Start the animation
+    dvdLogo.style.filter = `brightness(0) saturate(100%) invert(1) sepia(100%) saturate(10000%) hue-rotate(${Math.random() * 360}deg)`;
+    updateLogoPosition();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const screensaver = document.querySelector<HTMLElement>('.dvd-screensaver');
+    if (screensaver) {
+        initDvdScreensaver(screensaver);
+    }
+});
+</script>
+
+<div 
+    class="dvd-screensaver" 
+    data-logo-path={logoPath}
+    style={`--screensaver-opacity: ${opacity}`}
+></div>
