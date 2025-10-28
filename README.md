@@ -5,7 +5,6 @@ This is the official website for Din Våte Drøm, built with [Astro](https://ast
 ## 🚀 Project Structure
 
 ```text
-/
 ├── public/
 │   ├── dvd_logo.png
 │   ├── DVD_logo.svg
@@ -79,8 +78,6 @@ All commands are run from the root of the project, from a terminal:
 | `npm run build`           | Build your production site to `./dist/`          |
 | `npm run preview`         | Preview your build locally, before deploying     |
 | `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-
-```
 
 ## 📝 License
 
