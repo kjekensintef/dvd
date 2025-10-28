@@ -32,11 +32,15 @@ function initDvdScreensaver(screensaver: HTMLElement) {
     dvdLogo.src = logoPath;
     dvdLogo.alt = "DVD Logo";
     
-    // Set all required styles
+    // Define logo dimensions once
+    const logoWidth = 100;
+    const logoHeight = 44;
+
+    // Set up logo element with all styles
     Object.assign(dvdLogo.style, {
         position: 'absolute',
-        width: '100px',
-        height: '44px',
+        width: `${logoWidth}px`,
+        height: `${logoHeight}px`,
         pointerEvents: 'none',
         display: 'block',
         objectFit: 'contain',
@@ -48,42 +52,128 @@ function initDvdScreensaver(screensaver: HTMLElement) {
     
     screensaver.appendChild(dvdLogo);
     
-    // Fixed dimensions for DVD logo
-    const logoWidth = 100;
-    const logoHeight = 44;
-    
-    // Initial position and velocity
+    // Set initial position and velocity vectors
     let x = Math.random() * (window.innerWidth - logoWidth);
     let y = Math.random() * (window.innerHeight - logoHeight);
-    let dx = 2;
-    let dy = 2;
+    const baseSpeed = 2;
+    let dx = baseSpeed;
+    let dy = baseSpeed;
 
-    // Set initial position immediately
+    // Define vibrant base colors (in HSL)
+    const colors = [
+        { h: 0, s: 100, l: 55, name: 'Red' },      // Bright red
+        { h: 120, s: 100, l: 45, name: 'Green' },  // Deep green
+        { h: 230, s: 100, l: 55, name: 'Blue' },   // Vibrant blue
+        { h: 55, s: 100, l: 60, name: 'Yellow' },  // Bright yellow
+        { h: 290, s: 100, l: 65, name: 'Purple' }, // Vibrant purple
+        { h: 190, s: 100, l: 65, name: 'Cyan' },   // Bright cyan
+        { h: 322, s: 100, l: 60, name: 'Pink' }    // Hot pink
+    ];
+    
+    let lastColorIndex = -1;  // Track the last color used
+
+    // Function to generate vibrant colors
+    function changeLogoColor() {
+        // Get available colors excluding the last one used
+        const availableIndices = colors.map((_, index) => index)
+            .filter(index => index !== lastColorIndex);
+        
+        // Pick a random color from available ones
+        const newColorIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
+        const color = colors[newColorIndex];
+        
+        // Update last used color
+        lastColorIndex = newColorIndex;
+        
+        // Apply the color with increased vibrancy
+        dvdLogo.style.filter = `brightness(1.4) saturate(200%) 
+            invert(1) sepia(100%) saturate(2500%) 
+            hue-rotate(${color.h}deg) brightness(${color.l}%) saturate(${color.s}%)`;
+    }
+
+    // Set initial position and color
     dvdLogo.style.transform = `translate(${x}px, ${y}px)`;
+    changeLogoColor();
 
     function updateLogoPosition() {
-        // Update position
+        // Update position vector
         x += dx;
         y += dy;
 
-        // Check for collisions with window edges
-        if (x <= 0 || x >= window.innerWidth - logoWidth) {
+        const rightBound = window.innerWidth - logoWidth;
+        const bottomBound = window.innerHeight - logoHeight;
+
+        // Handle collisions
+        if (x <= 0 || x >= rightBound) {
             dx = -dx;
-            dvdLogo.style.filter = `brightness(0) saturate(100%) invert(1) sepia(100%) saturate(10000%) hue-rotate(${Math.random() * 360}deg)`;
+            changeLogoColor();
         }
-        if (y <= 0 || y >= window.innerHeight - logoHeight) {
+        if (y <= 0 || y >= bottomBound) {
             dy = -dy;
-            dvdLogo.style.filter = `brightness(0) saturate(100%) invert(1) sepia(100%) saturate(10000%) hue-rotate(${Math.random() * 360}deg)`;
+            changeLogoColor();
         }
 
-        // Apply new position
         dvdLogo.style.transform = `translate(${x}px, ${y}px)`;
         requestAnimationFrame(updateLogoPosition);
     }
 
-    // Start the animation
-    dvdLogo.style.filter = `brightness(0) saturate(100%) invert(1) sepia(100%) saturate(10000%) hue-rotate(${Math.random() * 360}deg)`;
+    // Track relative position as percentage
+    let lastKnownWidth = window.innerWidth;
+    let lastKnownHeight = window.innerHeight;
+
+    // Handle window resize while maintaining relative position
+    function handleResize() {
+        const rightBound = window.innerWidth - logoWidth;
+        const bottomBound = window.innerHeight - logoHeight;
+        const relativeX = x / (lastKnownWidth - logoWidth);
+        const relativeY = y / (lastKnownHeight - logoHeight);
+        let positionChanged = false;
+
+        // Update position maintaining relative position in viewport
+        if (window.innerWidth !== lastKnownWidth) {
+            x = relativeX * rightBound;
+        }
+        if (window.innerHeight !== lastKnownHeight) {
+            y = relativeY * bottomBound;
+        }
+
+        // Handle boundary collisions
+        if (x > rightBound) {
+            x = rightBound - 1;
+            dx = -Math.abs(dx);
+            positionChanged = true;
+        } else if (x < 0) {
+            x = 1;
+            dx = Math.abs(dx);
+            positionChanged = true;
+        }
+        
+        if (y > bottomBound) {
+            y = bottomBound - 1;
+            dy = -Math.abs(dy);
+            positionChanged = true;
+        } else if (y < 0) {
+            y = 1;
+            dy = Math.abs(dy);
+            positionChanged = true;
+        }
+
+        dvdLogo.style.transform = `translate(${x}px, ${y}px)`;
+        if (positionChanged) changeLogoColor();
+
+        lastKnownWidth = window.innerWidth;
+        lastKnownHeight = window.innerHeight;
+    }
+
+    // Initialize animation
+    changeLogoColor();
     updateLogoPosition();
+    window.addEventListener('resize', handleResize);
+
+    // Clean up resize listener when component is destroyed
+    document.addEventListener('astro:unmount', () => {
+        window.removeEventListener('resize', handleResize);
+    });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
