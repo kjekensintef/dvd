@@ -1,6 +1,7 @@
 ---
 import '../../styles/global.css';
 import BandLogo from '../BandLogo.astro';
+import ScrollIndicator from '../ScrollIndicator.astro';
 ---
 
 <style>
@@ -60,71 +61,6 @@ import BandLogo from '../BandLogo.astro';
         filter: brightness(0) saturate(100%) invert(62%) sepia(92%) saturate(749%) hue-rotate(165deg) brightness(98%) contrast(92%);
     }
 
-    @keyframes fadeOut {
-        from { opacity: 0.6; }
-        to { opacity: 0; }
-    }
-
-    @keyframes floatArrow {
-        0% { 
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
-        50% { 
-            transform: translateX(-50%) translateY(15px);
-            opacity: 0.8;
-        }
-        100% { 
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
-    }
-
-    .scroll-indicator {
-        position: fixed;
-        bottom: 32px;
-        left: 50%;
-        transform: translateX(-50%);
-        color: white;
-        font-size: 2.5rem;
-        line-height: 1;
-        animation: floatArrow 1.5s ease-in-out infinite;
-        opacity: 0.9;
-        pointer-events: none;
-        z-index: 1000;
-        text-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
-    }
-
-    .scroll-indicator::before {
-        content: 'SCROLL';
-        position: absolute;
-        left: 50%;
-        bottom: 100%;
-        transform: translateX(-50%);
-        font-size: 0.8rem;
-        letter-spacing: 0.1em;
-        margin-bottom: 4px;
-        font-weight: 500;
-        opacity: 0.9;
-    }
-
-    .scroll-indicator::after {
-        content: '▼';
-        position: absolute;
-        left: 50%;
-        top: -8px;
-        transform: translateX(-50%);
-        opacity: 0.4;
-        font-size: 1.8rem;
-    }
-
-    .scroll-indicator.fade-out {
-        animation: fadeOut 0.8s ease-out forwards;
-    }
-
-
-
     .ig-gradient-wrap {
         display: inline-block;
         position: relative;
@@ -149,28 +85,12 @@ import BandLogo from '../BandLogo.astro';
         opacity: 1;
     }
 </style>
-<script is:inline>
-document.addEventListener('DOMContentLoaded', () => {
-    const scrollIndicator = document.querySelector('.scroll-indicator');
-    
-    // Hide scroll indicator when user starts scrolling
-    window.addEventListener('scroll', () => {
-        if (scrollIndicator && !scrollIndicator.classList.contains('fade-out')) {
-            // Add the fade-out class to trigger the animation
-            scrollIndicator.classList.add('fade-out');
-            
-            // Listen for the animation end and remove the element
-            scrollIndicator.addEventListener('animationend', () => {
-                scrollIndicator.remove();
-            }, { once: true });
-        }
-    }, { passive: true });
-});
+
 </script>
 
 <div class="centered-header">
     <BandLogo />
-    <div class="scroll-indicator">▼</div>
+    <ScrollIndicator />
     <div class="social-row">
         <a class="social-link" href="https://www.facebook.com/dinvaatedrom" target="_blank" rel="noopener" aria-label="Facebook">
             <img src="/Facebook_Logo_Secondary.png" alt="Facebook" width="32" height="32" />
