@@ -95,10 +95,15 @@ function initDvdScreensaver(screensaver: HTMLElement) {
     dvdLogo.style.transform = `translate(${x}px, ${y}px)`;
     changeLogoColor();
 
-    function updateLogoPosition() {
-        // Update position vector
-        x += dx;
-        y += dy;
+    let lastTime = performance.now();
+    function updateLogoPosition(currentTime: number) {
+        // Calculate time elapsed since last frame
+        const deltaTime = (currentTime - lastTime) / 16.67; // normalize to ~60fps
+        lastTime = currentTime;
+
+        // Update position vector with deltaTime
+        x += dx * deltaTime;
+        y += dy * deltaTime;
 
         const rightBound = window.innerWidth - logoWidth;
         const bottomBound = window.innerHeight - logoHeight;
@@ -106,10 +111,12 @@ function initDvdScreensaver(screensaver: HTMLElement) {
         // Handle collisions
         if (x <= 0 || x >= rightBound) {
             dx = -dx;
+            x = x <= 0 ? 0 : rightBound; // Prevent sticking to edges
             changeLogoColor();
         }
         if (y <= 0 || y >= bottomBound) {
             dy = -dy;
+            y = y <= 0 ? 0 : bottomBound; // Prevent sticking to edges
             changeLogoColor();
         }
 
@@ -167,7 +174,7 @@ function initDvdScreensaver(screensaver: HTMLElement) {
 
     // Initialize animation
     changeLogoColor();
-    updateLogoPosition();
+    requestAnimationFrame(updateLogoPosition);
     window.addEventListener('resize', handleResize);
 
     // Clean up resize listener when component is destroyed
