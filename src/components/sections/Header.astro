@@ -90,24 +90,57 @@ import '../../styles/global.css';
     }
 
     @keyframes floatArrow {
-        0% { transform: translateX(-50%) translateY(0); }
-        50% { transform: translateX(-50%) translateY(10px); }
-        100% { transform: translateX(-50%) translateY(0); }
+        0% { 
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+        50% { 
+            transform: translateX(-50%) translateY(15px);
+            opacity: 0.8;
+        }
+        100% { 
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
     }
 
     .scroll-indicator {
         position: fixed;
-        bottom: 20px;
+        bottom: 32px;
         left: 50%;
         transform: translateX(-50%);
         color: white;
-        font-size: 1.5rem;
+        font-size: 2.5rem;
         line-height: 1;
-        animation: floatArrow 2s ease-in-out infinite;
-        opacity: 0.6;
+        animation: floatArrow 1.5s ease-in-out infinite;
+        opacity: 0.9;
         pointer-events: none;
         z-index: 1000;
-        filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
+        text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+    }
+
+    .scroll-indicator::before {
+        content: 'SCROLL';
+        position: absolute;
+        left: 50%;
+        bottom: 100%;
+        transform: translateX(-50%);
+        font-size: 0.8rem;
+        letter-spacing: 0.1em;
+        margin-bottom: 4px;
+        font-weight: 500;
+        opacity: 0.9;
+    }
+
+    .scroll-indicator::after {
+        content: '▼';
+        position: absolute;
+        left: 50%;
+        top: -8px;
+        transform: translateX(-50%);
+        opacity: 0.4;
+        font-size: 1.8rem;
     }
 
     .scroll-indicator.fade-out {
