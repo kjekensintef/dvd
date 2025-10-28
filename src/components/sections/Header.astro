@@ -2,6 +2,7 @@
 import '../../styles/global.css';
 import BandLogo from '../BandLogo.astro';
 import ScrollIndicator from '../ScrollIndicator.astro';
+import SocialRow from '../SocialRow.astro';
 ---
 
 <style>
@@ -12,96 +13,10 @@ import ScrollIndicator from '../ScrollIndicator.astro';
         align-items: center;
         justify-content: center;
     }
-
-    .social-row {
-        display: flex;
-        gap: 2rem;
-        margin-top: 1rem;
-    }
-
-    .social-link {
-        color: #f3f4f6;
-        text-decoration: none;
-        font-size: 2rem;
-        transition: color 0.2s;
-        width: 56px;
-        height: 56px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    /* Social Links */
-    .social-link img {
-        display: block;
-        margin: 0 auto;
-    }
-
-    /* YouTube */
-    .social-link-youtube {
-        padding-inline: 4px;
-    }
-
-    .yt-logo {
-        width: 119px;
-        height: 40px;
-    }
-
-    .social-link-youtube:hover .yt-logo {
-        content: url('/yt_logo_fullcolor_white_digital.png');
-    }
-
-    /* Facebook */
-    .social-link[href*="facebook.com"]:hover img {
-        filter: brightness(0) saturate(100%) invert(34%) sepia(99%) saturate(749%) hue-rotate(183deg) brightness(98%) contrast(92%);
-    }
-
-    /* Instagram */
-    .social-link:not([href*="facebook.com"]):not(.social-link-youtube):hover img {
-        filter: brightness(0) saturate(100%) invert(62%) sepia(92%) saturate(749%) hue-rotate(165deg) brightness(98%) contrast(92%);
-    }
-
-    .ig-gradient-wrap {
-        display: inline-block;
-        position: relative;
-        width: 32px;
-        height: 32px;
-    }
-
-    .ig-gradient-wrap::after {
-        content: '';
-        position: absolute;
-        left: 0; top: 0; width: 100%; height: 100%;
-        pointer-events: none;
-        opacity: 0;
-        z-index: 2;
-        border-radius: 8px;
-        background: radial-gradient(circle at 30% 110%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
-        mix-blend-mode: screen;
-        transition: opacity 0.2s;
-    }
-
-    .social-link[href*="instagram.com"]:hover .ig-gradient-wrap::after {
-        opacity: 1;
-    }
 </style>
-
-</script>
 
 <div class="centered-header">
     <BandLogo />
     <ScrollIndicator />
-    <div class="social-row">
-        <a class="social-link" href="https://www.facebook.com/dinvaatedrom" target="_blank" rel="noopener" aria-label="Facebook">
-            <img src="/Facebook_Logo_Secondary.png" alt="Facebook" width="32" height="32" />
-        </a>
-        <a class="social-link social-link-youtube" href="https://www.youtube.com/@dinvatedrom" target="_blank" rel="noopener" aria-label="YouTube">
-            <img src="/yt_logo_white_digital.png" alt="YouTube" class="yt-logo" />
-        </a>
-        <a class="social-link" href="https://www.instagram.com/dinvatedrom/" target="_blank" rel="noopener" aria-label="Instagram">
-            <span class="ig-gradient-wrap">
-                <img src="/Instagram_Glyph_White.png" alt="Instagram" width="32" height="32" />
-            </span>
-        </a>
-    </div>
+    <SocialRow />
 </div>
