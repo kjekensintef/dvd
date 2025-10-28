@@ -1,6 +1,6 @@
 ---
 import '../../styles/global.css';
-import DvdScreensaver from '../DvdScreensaver.astro';
+import BandLogo from '../BandLogo.astro';
 ---
 
 <style>
@@ -10,17 +10,6 @@ import DvdScreensaver from '../DvdScreensaver.astro';
         flex-direction: column;
         align-items: center;
         justify-content: center;
-    }
-
-    .logo {
-        max-width: 400px;
-        width: 80vw;
-        margin-bottom: 2rem;
-        display: block;
-        cursor: pointer;
-        -webkit-tap-highlight-color: transparent;
-        -webkit-touch-callout: none;
-        user-select: none;
     }
 
     .social-row {
@@ -134,11 +123,7 @@ import DvdScreensaver from '../DvdScreensaver.astro';
         animation: fadeOut 0.8s ease-out forwards;
     }
 
-    /* @media (min-width: 1024px) {
-        .scroll-indicator {
-            display: none;
-        }
-    } */
+
 
     .ig-gradient-wrap {
         display: inline-block;
@@ -165,10 +150,7 @@ import DvdScreensaver from '../DvdScreensaver.astro';
     }
 </style>
 <script is:inline>
-// Rapid splash emoji spawn on logo mousedown/hold
 document.addEventListener('DOMContentLoaded', () => {
-
-    const logo = document.getElementById('band-logo');
     const scrollIndicator = document.querySelector('.scroll-indicator');
     
     // Hide scroll indicator when user starts scrolling
@@ -177,159 +159,17 @@ document.addEventListener('DOMContentLoaded', () => {
             // Add the fade-out class to trigger the animation
             scrollIndicator.classList.add('fade-out');
             
-            // Listen for the animation end
-            scrollIndicator.addEventListener('animationend', (e) => {
-                if (e.animationName === 'fadeOut') {
-                    scrollIndicator.remove();
-                }
+            // Listen for the animation end and remove the element
+            scrollIndicator.addEventListener('animationend', () => {
+                scrollIndicator.remove();
             }, { once: true });
         }
     }, { passive: true });
-    let spawnInterval = null;
-
-    function spawnEmojiAt(x, y) {
-        const emoji = document.createElement('div');
-        emoji.className = 'splash-emoji';
-        emoji.textContent = '💦';
-        emoji.style.fontSize = '3rem';
-        document.body.appendChild(emoji);
-        emoji.style.position = 'fixed';
-        emoji.style.left = `${x}px`;
-        emoji.style.top = `${y}px`;
-        emoji.style.pointerEvents = 'none';
-        const vx = (Math.random() * 2 - 1);
-        const vy = -(Math.random() * 0.7 + 0.3);
-        const duration = 2.2;
-        const velocityScale = 600;
-        const gravity = 1200;
-        const animName = `splash-bounce-${Date.now()}-${Math.floor(Math.random()*10000)}`;
-        const startRot = Math.floor(Math.random() * 360) - 180;
-        const endRot = startRot + (Math.random() * 2160 - 1080);
-        const styleSheet = document.createElement('style');
-        function projectileAt(t) {
-            const x = vx * velocityScale * t;
-            const y = vy * velocityScale * t + 0.5 * gravity * t * t;
-            return { x, y };
-        }
-        const kf = [];
-        const steps = 100;
-        for (let i = 0; i <= steps; i++) {
-            const t = duration * (i / steps);
-            const percent = Math.round((i / steps) * 100);
-            const { x, y } = projectileAt(t);
-            let opacity = 1;
-            let scale = 1;
-            let rotate = startRot + (endRot - startRot) * (i / steps);
-            if (percent === 0) {
-                opacity = 0;
-                scale = 1;
-                rotate = startRot;
-            } else if (percent === Math.round(10 * 100 / steps)) {
-                scale = 1;
-            } else if (percent === 100) {
-                opacity = 0;
-                scale = 1;
-                rotate = endRot;
-            }
-            kf.push(`${percent}% { opacity: ${opacity}; transform: translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(${scale}) rotate(${rotate}deg); }`);
-        }
-        styleSheet.innerHTML = `@keyframes ${animName} {\n${kf.join('\n')}\n}`;
-        document.head.appendChild(styleSheet);
-        void emoji.offsetWidth;
-        emoji.style.animation = `${animName} ${duration}s cubic-bezier(0.3, 0.7, 0.6, 1.2) forwards`;
-        setTimeout(() => {
-            emoji.remove();
-            styleSheet.remove();
-        }, (duration + 0.2) * 1000);
-    }
-
-    // Spawn state
-    let isSpawning = false;
-    let mouseX = 0;
-    let mouseY = 0;
-
-    // Prevent default drag behavior of the logo
-    logo.draggable = false;
-    logo.addEventListener('dragstart', e => e.preventDefault());
-
-    // Check if point is within logo boundaries
-    function isWithinLogo(x, y) {
-        const rect = logo.getBoundingClientRect();
-        return (
-            x >= rect.left && 
-            x <= rect.right && 
-            y >= rect.top && 
-            y <= rect.bottom
-        );
-    }
-
-    // Helper function to get coordinates from either mouse or touch event
-    function getEventCoordinates(e) {
-        if (e.touches) {
-            return { x: e.touches[0].clientX, y: e.touches[0].clientY };
-        }
-        return { x: e.clientX, y: e.clientY };
-    }
-
-    // Start spawning emojis (mouse & touch)
-    function startSpawning(e) {
-        if (e.type === 'mousedown' && e.button !== 0) return; // left click only for mouse
-        isSpawning = true;
-        const coords = getEventCoordinates(e);
-        mouseX = coords.x;
-        mouseY = coords.y;
-
-        spawnInterval = setInterval(() => {
-            if (isSpawning) {
-                spawnEmojiAt(mouseX, mouseY);
-            }
-        }, 60);
-
-        // Prevent default behavior
-        e.preventDefault();
-    }
-
-    // Track movement and check boundaries (mouse & touch)
-    function trackMovement(e) {
-        if (!isSpawning) return;
-        
-        const coords = getEventCoordinates(e);
-        mouseX = coords.x;
-        mouseY = coords.y;
-
-        if (!isWithinLogo(mouseX, mouseY)) {
-            stopSpawning();
-        }
-
-        // Prevent default behavior
-        e.preventDefault();
-    }
-
-    // Stop spawning
-    function stopSpawning() {
-        isSpawning = false;
-        if (spawnInterval) {
-            clearInterval(spawnInterval);
-            spawnInterval = null;
-        }
-    }
-
-    // Add mouse event listeners
-    logo.addEventListener('mousedown', startSpawning);
-    document.addEventListener('mousemove', trackMovement);
-    window.addEventListener('mouseup', stopSpawning);
-
-    // Add touch event listeners
-    logo.addEventListener('touchstart', startSpawning, { passive: false });
-    document.addEventListener('touchmove', trackMovement, { passive: false });
-    window.addEventListener('touchend', stopSpawning);
-    window.addEventListener('touchcancel', stopSpawning);
 });
 </script>
 
-<DvdScreensaver logoPath="/DVD_logo.svg" opacity={0.8} />
 <div class="centered-header">
-    <img src="/dvd_logo.png" alt="DVD Band Logo" class="logo" id="band-logo" />
+    <BandLogo />
     <div class="scroll-indicator">▼</div>
     <div class="social-row">
         <a class="social-link" href="https://www.facebook.com/dinvaatedrom" target="_blank" rel="noopener" aria-label="Facebook">
