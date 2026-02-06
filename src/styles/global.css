@@ -1,7 +1,17 @@
+/* CSS Variables for reusable colors */
+:root {
+    --color-background: #18181b;
+    --color-card-background: #23232b;
+    --color-text: #f3f4f6;
+    --color-primary: #f5610b;
+    --color-link: #38bdf8;
+    --color-shadow: rgba(0, 0, 0, 0.27);
+}
+
 /* Base styles */
 body {
-    background: #18181b;
-    color: #f3f4f6;
+    background: var(--color-background);
+    color: var(--color-text);
     min-height: 100vh;
     margin: 0;
     font-family: 'Segoe UI', Arial, sans-serif;

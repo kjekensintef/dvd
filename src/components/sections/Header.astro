@@ -13,10 +13,22 @@ import SocialRow from '../SocialRow.astro';
         align-items: center;
         justify-content: center;
     }
+
+    .coming-soon {
+        font-size: 2rem;
+        font-weight: 700;
+        font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        letter-spacing: 0.05em;
+        margin: -0.5rem 0 0 0;
+        color: var(--color-primary);
+    }
 </style>
 
 <div class="centered-header">
     <BandLogo />
-    <ScrollIndicator />
+    <!-- <ScrollIndicator /> -->
+    <div class="coming-soon">
+        Kommer snart!
+    </div>
     <SocialRow />
 </div>
