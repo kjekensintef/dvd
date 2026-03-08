@@ -15,11 +15,18 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-attachment: fixed;
+    background-attachment: scroll;
     color: var(--color-text);
     min-height: 100vh;
     margin: 0;
     font-family: 'Bebas Neue', sans-serif;
+}
+
+/* Fixed background for desktop only */
+@media (min-width: 768px) {
+    body {
+        background-attachment: fixed;
+    }
 }
 
 /* Utility classes */
