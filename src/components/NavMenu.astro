@@ -84,9 +84,15 @@ import '../styles/global.css';
                     const targetSection = document.querySelector(targetId);
                     
                     if (targetSection) {
-                        targetSection.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
+                        const style = window.getComputedStyle(targetSection);
+                        const marginTop = parseFloat(style.marginTop) || 0;
+                        const nav = document.querySelector('.nav-menu') as HTMLElement | null;
+                        const navHeight = nav?.offsetHeight || 0;
+                        const targetPosition = targetSection.getBoundingClientRect().top + window.scrollY - marginTop - navHeight;
+
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
                         });
                     }
                 }
