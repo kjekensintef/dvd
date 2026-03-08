@@ -1,5 +1,4 @@
 ---
-import '../../styles/global.css';
 import SocialRow from '../SocialRow.astro';
 ---
 
@@ -22,21 +21,41 @@ import SocialRow from '../SocialRow.astro';
         transform: scale(1.1);
     }
 
+    .back-to-top .logo-container {
+        position: relative;
+        display: inline-block;
+        width: 48px;
+    }
+
     .back-to-top img {
         width: 48px;
         height: auto;
         display: block;
-        transition: content 0.2s;
+        transition: opacity 0.2s;
     }
 
-    .back-to-top:hover img {
-        content: url('/dvd_logo.png');
+    .back-to-top .logo-hover {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+    }
+
+    .back-to-top:hover .logo-default {
+        opacity: 0;
+    }
+
+    .back-to-top:hover .logo-hover {
+        opacity: 1;
     }
 </style>
 
 <footer>
     <a href="#" class="back-to-top" aria-label="Back to top">
-        <img src="/logo_hvit.png" alt="DVD logo" />
+        <span class="logo-container">
+            <img class="logo-default" src="/logo_hvit.png" alt="DVD logo" />
+            <img class="logo-hover" src="/dvd_logo.png" alt="DVD logo" />
+        </span>
     </a>
     <div style="margin-bottom: 1rem; display: flex; justify-content: center;">
         <SocialRow />
