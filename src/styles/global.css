@@ -8,6 +8,17 @@
     --color-shadow: rgba(0, 0, 0, 0.27);
 }
 
+/* Box sizing reset */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/* Prevent horizontal overflow */
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+}
+
 /* Base styles */
 body {
     background: var(--color-background);

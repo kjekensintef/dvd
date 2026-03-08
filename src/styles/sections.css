@@ -2,9 +2,15 @@
     /* max-width: 600px; */
     margin: 2rem auto;
     background: rgba(35, 35, 43, 0.8);
-    padding: 2rem 2.5rem;
+    padding: 2rem 1rem;
     box-shadow: 0 2px 16px var(--color-shadow);
     text-align: left;
+}
+
+@media (min-width: 768px) {
+    .section-card {
+        padding: 2rem 2.5rem;
+    }
 }
 
 .section-title {
