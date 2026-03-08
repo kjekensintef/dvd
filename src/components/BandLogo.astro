@@ -1,13 +1,51 @@
 <style>
-    .logo {
-        max-width: 400px;
-        width: 80vw;
+    .logo-container {
+        position: relative;
+        max-width: 300px;
+        width: 60vw;
         margin-bottom: 2rem;
+        display: inline-block;
+    }
+
+    .logo {
+        width: 100%;
         display: block;
         cursor: pointer;
         -webkit-tap-highlight-color: transparent;
         -webkit-touch-callout: none;
         user-select: none;
+    }
+
+    .rotating-image {
+        position: absolute;
+        width: 44vw;
+        max-width: 220px;
+        height: auto;
+        top: 50%;
+        left: 50%;
+        pointer-events: none;
+        animation: rotate-around 5s linear infinite;
+    }
+
+    @keyframes rotate-around {
+        from {
+            transform: translate(-50%, -50%) rotate(0deg) translateY(calc(-37.5vw)) rotate(15deg);
+        }
+        to {
+            transform: translate(-50%, -50%) rotate(-360deg) translateY(calc(-37.5vw)) rotate(15deg);
+        }
+    }
+
+    /* Max size for larger screens */
+    @media (min-width: 500px) {
+        @keyframes rotate-around {
+            from {
+                transform: translate(-50%, -50%) rotate(0deg) translateY(-188px) rotate(15deg);
+            }
+            to {
+                transform: translate(-50%, -50%) rotate(-360deg) translateY(-188px) rotate(15deg);
+            }
+        }
     }
 </style>
 
@@ -160,9 +198,16 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
-<img 
-    src="/dvd_logo.png" 
-    alt="DVD Band Logo" 
-    class="logo"
-    id="band-logo" 
-/>
+<div class="logo-container">
+    <img 
+        src="/logo_hvit.png" 
+        alt="DVD Band Logo" 
+        class="logo"
+        id="band-logo" 
+    />
+    <img 
+        src="/magnus_stuper_large.png" 
+        alt="" 
+        class="rotating-image"
+    />
+</div>

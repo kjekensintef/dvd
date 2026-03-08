@@ -11,10 +11,15 @@
 /* Base styles */
 body {
     background: var(--color-background);
+    background-image: url('/bg_large.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     color: var(--color-text);
     min-height: 100vh;
     margin: 0;
-    font-family: 'Segoe UI', Arial, sans-serif;
+    font-family: 'Bebas Neue', sans-serif;
 }
 
 /* Utility classes */
