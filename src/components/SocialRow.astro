@@ -36,14 +36,32 @@
         padding-inline: 4px;
     }
 
+    .yt-logo-container {
+        position: relative;
+        display: inline-block;
+        width: 119px;
+        height: 40px;
+    }
+
     .yt-logo {
         width: 119px;
         height: 40px;
-        transition: content var(--hover-transition);
+        transition: opacity var(--hover-transition);
     }
 
-    .social-link-youtube:hover .yt-logo {
-        content: url('/yt_logo_fullcolor_white_digital.png');
+    .yt-logo-hover {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+    }
+
+    .social-link-youtube:hover .yt-logo-default {
+        opacity: 0;
+    }
+
+    .social-link-youtube:hover .yt-logo-hover {
+        opacity: 1;
     }
 
     /* Facebook */
@@ -95,7 +113,10 @@
         <img src="/Facebook_Logo_Secondary.png" alt="Facebook" width="32" height="32" />
     </a>
     <a class="social-link social-link-youtube" href="https://www.youtube.com/@dinvatedrom" target="_blank" rel="noopener" aria-label="YouTube">
-        <img src="/yt_logo_white_digital.png" alt="YouTube" class="yt-logo" />
+        <span class="yt-logo-container">
+            <img src="/yt_logo_white_digital.png" alt="YouTube" class="yt-logo yt-logo-default" />
+            <img src="/yt_logo_fullcolor_white_digital.png" alt="YouTube" class="yt-logo yt-logo-hover" />
+        </span>
     </a>
     <a class="social-link" href="https://www.instagram.com/dinvatedrom/" target="_blank" rel="noopener" aria-label="Instagram">
         <span class="ig-gradient-wrap">
