@@ -1,5 +1,6 @@
 ---
 import '../../styles/global.css';
+import SocialRow from '../SocialRow.astro';
 ---
 
 <style>
@@ -10,8 +11,43 @@ import '../../styles/global.css';
         font-size: 0.875rem;
         margin-top: 2rem;
     }
+
+    .back-to-top {
+        display: inline-block;
+        margin-bottom: 1rem;
+        transition: transform 0.2s;
+    }
+
+    .back-to-top:hover {
+        transform: scale(1.1);
+    }
+
+    .back-to-top img {
+        width: 48px;
+        height: auto;
+        display: block;
+        transition: content 0.2s;
+    }
+
+    .back-to-top:hover img {
+        content: url('/dvd_logo.png');
+    }
 </style>
 
 <footer>
+    <a href="#" class="back-to-top" aria-label="Back to top">
+        <img src="/logo_hvit.png" alt="DVD logo" />
+    </a>
+    <div style="margin-bottom: 1rem; display: flex; justify-content: center;">
+        <SocialRow />
+    </div>
+
     © {new Date().getFullYear()} Din Våte Drøm. All rights reserved.
+
+<script>
+    document.querySelector('.back-to-top')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+</script>
 </footer>
