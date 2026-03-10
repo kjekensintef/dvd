@@ -1,20 +1,26 @@
 ---
 import '../../styles/global.css';
 import '../../styles/sections.css';
+import ImageCarousel from '../ImageCarousel.astro';
+
+const carouselImages = [
+    '/band2.jpg',
+    '/live2.jpg',
+    '/band1.jpg',
+    '/live1.jpg'
+];
 ---
 <section id="about" class="section-card">
     <h2 class="section-title">Vi er Din Våte Drøm</h2>
+    <ImageCarousel images={carouselImages} />
     <p class="section-text">
-        Din Våte Drøm spiller «Rockemusikk». Debutalbumet fra Oslos kjekkeste treffer som vårsol gjennom glippen i gardinene, og det er bare å åpne opp.
+        Din Våte Drøm er et vranglært og ærlig rockeband fra Oslos omkringliggende villastrøk. 
     </p>
     <p class="section-text">
-        Noen sier sangene beskriver den første midtlivskrisen. Han venter på en beskjed, hun skal på jobbsøker-kurs. Det blir november. Svaret? Rockemusikk. 
+        DVD er fem gutter som digger de fire store, nittitallsrock og elektriske liveshows. Tekstene spinner rundt eget liv og erfaringer - selvrealisering, jobbsøkerkurs, hunder som avlives og rockemusikken som redningen.
     </p>
     <p class="section-text">
-        Albumet er produsert av Kenneth Ishak. På rådgiversiden har bandet med seg Knut Schreiner. Singelen “La det skje” gjestes av barndomshelten Lars Lillo-Stenberg. Rockemusikk gis ut på Diger.
-    </p>
-    <p class="section-text">
-        Din Våte Drøm har spilt seg gjennom et flertall av klubbene i Oslo, opptrådt i København, Notodden, Bergen, Volda, samt diverse hagefester, låvefester, og helt vanlige fester. De er kjent for forrykende show. Plateslippet feires på Parkteatret 5.juni
+        Bandet har spilt seg gjennom et flertall av klubbene i Oslo, opptrådt i København, Notodden, Bergen, Volda, samt diverse hagefester, låvefester, og helt vanlige fester. De er kjent for forrykende show.
     </p>
     <p class="section-text">
         For booking og henvendelser, send oss en mail på <a href="mailto:dinvatedrom@gmail.com" class="section-link" rel="noopener noreferrer">dinvatedrom@gmail.com</a>
