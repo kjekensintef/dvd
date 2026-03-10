@@ -1,10 +1,53 @@
 ---
 import '../../styles/global.css';
 import '../../styles/sections.css';
+import ConcertItem from '../ConcertItem.astro';
 ---
 <section id="concerts" class="section-card">
     <h2 class="section-title">Konserter</h2>
-    <ul class="section-text" style="padding-left: 1.2em;">
-        <li>5. Juni, 2026 – Parkteateret, Oslo <a href="https://www.ticketmaster.no/event/din-vate-drom-slippfest-billetter/846434508" target="_blank" rel="noopener" class="section-link">Billetter</a></li>
+    <ul class="concerts-list">
+        <ConcertItem 
+            date="8. Mai, 2026"
+            venue="Nidhoggs Brønn, Tønsberg"
+            venueUrl="https://www.facebook.com/p/Nidhoggs-br%C3%B8nn-61561386804095/"
+            ticketUrl={null}
+            occasion={null}
+        />
+        <ConcertItem 
+            date="15. Mai, 2026"
+            venue="Tomrummet, Malmø"
+            venueUrl="https://tomrummet.xyz/"
+            ticketUrl={null}
+            occasion="Med Södergatan"
+        />
+        <ConcertItem 
+            date="5. Juni, 2026"
+            venue="Parkteateret, Oslo"
+            venueUrl="https://www.parkteatret.no/"
+            ticketUrl="https://www.ticketmaster.no/event/din-vate-drom-slippfest-billetter/846434508"
+            occasion="Releasekonsert"
+        />
+        <ConcertItem 
+            date="7. Juni, 2026"
+            venue="Elsehuset, Aurskog"
+            venueUrl="https://elsehuset.no/"
+            ticketUrl="https://konserterielsehuset.hoopla.no/event/trearsjubileum"
+            occasion="3-årsjubileum Elsehuset"
+        />
+        <ConcertItem 
+            date="26. September, 2026"
+            venue="Uro, Tønsberg"
+            venueUrl="https://www.urohaugar.com/"
+            ticketUrl={null}
+            occasion={null}
+        />
     </ul>
 </section>
+
+<style>
+    .concerts-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+</style>

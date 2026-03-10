@@ -1,0 +1,102 @@
+---
+interface Props {
+  date: string;
+  venue: string;
+  venueUrl: string | null;
+  occasion: string | null;
+  ticketUrl: string | null;
+}
+
+const { date, venue, venueUrl, occasion, ticketUrl } = Astro.props;
+---
+
+<li class="concert-item">
+  <div class="concert-info">
+    <span class="concert-date">{date}</span>
+    <span class="concert-venue">{
+        venueUrl ? (
+            <a href={venueUrl} target="_blank" rel="noopener" class="concert-venue-link">
+                {venue}
+            </a>
+        ) : (
+            venue
+        )
+    }</span>
+  </div>
+    {occasion && (
+      <span class="concert-occasion">{occasion}</span>
+    )}
+  {ticketUrl ? (
+    <a href={ticketUrl} target="_blank" rel="noopener" class="concert-ticket-link">
+        Billetter
+    </a>
+  ) : (
+    <span class="concert-ticket-link" style="opacity: 0.6; cursor: not-allowed;">
+        I døra
+    </span>
+  )}
+</li>
+
+<style>
+  .concert-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-bottom: 0.75rem;
+    margin-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+  }
+
+  .concert-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+
+  .concert-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .concert-date {
+    color: var(--color-nav);
+  }
+
+  .concert-venue {
+    color: var(--color-text);
+    font-size: 0.95rem;}
+
+  .concert-venue-link {
+    color: var(--color-text);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .concert-venue-link:hover {
+    color: var(--color-link);
+    text-decoration: underline;
+  }
+
+  .concert-occasion {
+    color: var(--color-text);
+  }
+
+  .concert-ticket-link {
+    color: var(--color-link);
+    text-decoration: none;
+    padding: 0.25rem 0.75rem;
+    border: 1px solid var(--color-link);
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    min-width: 75px;
+    text-align: center;
+  }
+
+  .concert-ticket-link:hover {
+    background-color: var(--color-link);
+    color: white;
+  }
+</style>
