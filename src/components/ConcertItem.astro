@@ -5,9 +5,10 @@ interface Props {
   venueUrl: string | null;
   occasion: string | null;
   ticketUrl: string | null;
+  isFree?: boolean;
 }
 
-const { date, venue, venueUrl, occasion, ticketUrl } = Astro.props;
+const { date, venue, venueUrl, occasion, ticketUrl, isFree } = Astro.props;
 ---
 
 <li class="concert-item">
@@ -30,6 +31,10 @@ const { date, venue, venueUrl, occasion, ticketUrl } = Astro.props;
     <a href={ticketUrl} target="_blank" rel="noopener" class="concert-ticket-link">
         Billetter
     </a>
+  ) : isFree ? (
+    <span class="concert-ticket-link" style="opacity: 0.6; cursor: not-allowed;">
+        Gratis
+    </span>
   ) : (
     <span class="concert-ticket-link" style="opacity: 0.6; cursor: not-allowed;">
         I døra
