@@ -1,13 +1,28 @@
 ---
 import '../../styles/global.css';
 import '../../styles/sections.css';
+import ImageCarousel from '../ImageCarousel.astro';
+import merch1 from '../../assets/merch/merch1.jpg';
+import merch2 from '../../assets/merch/merch2.jpg';
+import merch3 from '../../assets/merch/merch3.jpg';
+import merch4 from '../../assets/merch/merch4.jpg';
+import merch5 from '../../assets/merch/merch5.jpg';
+
+const merchImages = [merch1, merch2, merch3, merch4, merch5];
 ---
 <section id="merch" class="section-card">
     <h2 class="section-title">Sjappa</h2>
     <p class="section-text">
-        Forhåndsbestill Rockemusikk på vinyl her: <a href="https://tigernet.no/releases/1069677-rockemusikk" class="section-link" rel="noopener noreferrer">Rockemusikk</a>
+        Rockemusikk på vinyl her: <a href="https://tigernet.no/releases/1069677-rockemusikk" class="section-link" rel="noopener noreferrer">Rockemusikk</a>
     </p>
     <p class="section-text">
-        Merch kommer snart!
+        Selges også de fleste steder du kjøper musikk (Platekompaniet, Big Dipper osv)
     </p>
+    <p class="section-text">
+        T-skjorter kjøper du her: <a href="https://tigernet.no/releases/1079006-rockemusikk-t-shirt" class="section-link" rel="noopener noreferrer">T-skjorte</a>
+    </p>
+    <p class="section-text">
+        Alt kan også selvfølgelig kjøpes på konsertene våre, og vi tar Vipps!
+    </p>
+    <ImageCarousel images={merchImages} />
 </section>

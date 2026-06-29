@@ -1,6 +1,9 @@
 ---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
 interface Props {
-  images: string[];
+  images: ImageMetadata[];
 }
 
 const { images } = Astro.props;
@@ -11,9 +14,11 @@ const { images } = Astro.props;
     <button class="carousel-button prev" aria-label="Previous image">‹</button>
     <div class="carousel-images">
       {images.map((image, index) => (
-        <img 
-          src={image} 
+        <Image
+          src={image}
           alt={`Gallery image ${index + 1}`}
+          width={800}
+          quality={80}
           class={index === 0 ? 'active' : ''}
           loading="lazy"
         />
